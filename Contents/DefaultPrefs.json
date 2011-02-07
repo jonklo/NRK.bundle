@@ -4,13 +4,13 @@
         "label": "LIVETV_QUALITY",
         "type": "enum",
         "values": ["h", "m", "l"],
-        "default": "h",
+        "default": "h"
     },
     {
         "id": "radio_quality",
         "label": "RADIO_QUALITY",
         "type": "enum",
         "values": ["h", "m"],
-        "default": "h",
+        "default": "h"
     }
 ]
