@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
 from util import fix_chars
 
 BASE_URL_WEBTV = 'http://www.nrk.no/nett-tv'
@@ -49,13 +45,13 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
     # Fetch program content 
     if projectId:
         url = '%s/prosjekt/%s/' % (BASE_URL_WEBTV, projectId)
-        page = XML.ElementFromURL(url, isHTML=True, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+        page = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
         elements = page.xpath('//div[@class="nettv-list"]/ul')[0]
         
     elif categoryId:
         url = '%s/menyfragment.aspx?type=category&id=%s' % (BASE_URL_WEBTV, categoryId)
         Log('Fetching %s' % url)
-        elements = XML.ElementFromURL(url, isHTML=True, cacheTime=CACHE_HTML_INTERVAL) # , encoding='utf-8'
+        elements = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL) # , encoding='utf-8'
     
     # Display error message if there's no content
     if not elements:
@@ -74,7 +70,7 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
         if elem_a.get('href').find('klipp') != -1:
             
             # Title
-            raw_title = fix_chars(elem_a.get('title'))
+            raw_title = elem_a.get('title')
             Log('Raw clip title: %s' % raw_title)
             
             # Split title and add as a description
@@ -88,7 +84,7 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
             
             # Link and MMS URL
             html_link = elem_a.get('href')
-            clip_mms_url = _get_wmv_link(html_link)
+            clip_mms_url = get_wmv_link(html_link)
             
             # TODO Does not support URLs with unicode characters
             try:
@@ -101,7 +97,7 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
         elif elem_a.get('href').find('kategori') != -1:
             
             # Title
-            raw_title = fix_chars(elem_a.get('title'))
+            raw_title = elem_a.get('title')
             Log('Raw category title: %s' % raw_title)
             
             # Split title and add as a description
@@ -146,7 +142,7 @@ def WebTVMostViewedMenu(sender, days=7):
     url = '%s/ml/topp12.aspx?dager=%s' % (BASE_URL_WEBTV, days)
     Log('Fetching %s' % url)
     
-    page = XML.ElementFromURL(url, isHTML=True, cacheTime=0 , encoding='utf-8')
+    page = HTML.ElementFromURL(url, cacheTime=0 , encoding='utf-8')
     program_elements = page.xpath('//ul')[0]
     
     # Display error message if there's no content
@@ -154,18 +150,17 @@ def WebTVMostViewedMenu(sender, days=7):
         return (MessageContainer(header=L('title'), message=L('webtv_error_nocontent'), title1=L('title')))
     
     for program_element in program_elements:
-        Log(program_element)
-        # Program title and description
         
+        # Program image and title
         img = program_element.xpath('./div/a/img')[0].get('src')
-        title = fix_chars(program_element.xpath('./div/h3/a')[0].text)
+        title = program_element.xpath('./div/h3/a')[0].text
         
-        # Program image and clip URL
+        # Program clip URL and description
         html_link = program_element.xpath('./div/a')[0].get('href')
-        desc = fix_chars(program_element.xpath('./div/div[@class="summary"]/p')[0].text)
+        desc = program_element.xpath('./div/div[@class="summary"]/p')[0].text
         
         # Append the item to the list
-        dir.Append(WindowsMediaVideoItem(_get_wmv_link(html_link), title=title, summary=desc, thumb=img, width=768, height=432))
+        dir.Append(WindowsMediaVideoItem(get_wmv_link(html_link), title=title, summary=desc, thumb=img, width=768, height=432))
     
     return dir
 
@@ -218,7 +213,7 @@ def WebTVContentMenu(sender, genre_id=None, letter=None):
     elif letter:
         url = '%s/bokstav/%s/' % (BASE_URL_WEBTV, letter)
     
-    page = XML.ElementFromURL(url, isHTML=True, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
+    page = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL, encoding='utf-8')
     elements = page.xpath('//div[contains(@class,"nettv-category")]/ul')[0]
     
     # Display error message if there's no content
@@ -264,7 +259,7 @@ def WebTVByLetterMenu(sender, query):
 # Helpers #
 ###########
 
-def _get_wmv_link(clip_url):
+def get_wmv_link(clip_url):
     """
     Fetches the Windows Meda Video link.
     """
@@ -272,7 +267,7 @@ def _get_wmv_link(clip_url):
     
     url = '%s/silverlight/getmediaxml.ashx?id=%s&hastighet=2000&vissuper=True' % (BASE_URL_WEBTV, clip_id)
     
-    page = XML.ElementFromURL(url, isHTML=True, cacheTime=CACHE_HTML_INTERVAL)
+    page = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL)
     
     if not page:
         Log('Error fetching URL from %s' % url)

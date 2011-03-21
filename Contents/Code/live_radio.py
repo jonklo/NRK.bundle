@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
-
 LIVE_RADIO_BASEURL = 'http://lyd.nrk.no/nrk_radio_'
 LIVE_RADIO_QUALITY = 'h' # h (high) or m (medium)
 

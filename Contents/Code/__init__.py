@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
 from live_radio import LiveRadioMenu
 from live_tv import LiveTVMenu
 from podcasts import *
