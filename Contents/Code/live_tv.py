@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
-
 
 LIVE_TV_STATIONS = (
     {

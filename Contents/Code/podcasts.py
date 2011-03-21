@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-from PMS import *
-from PMS.Objects import *
-from PMS.Shortcuts import *
 
 CACHE_HTML_INTERVAL = 3600 * 5
 CACHE_RSS_FEED_INTERVAL = 3600
