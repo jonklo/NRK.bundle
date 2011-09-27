@@ -20,7 +20,7 @@ def PodcastMenu(sender, kind):
     """
     dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
     
-    page = XML.ElementFromURL(PODCAST_URL, isHTML=True, cacheTime=CACHE_HTML_INTERVAL)
+    page = HTML.ElementFromURL(PODCAST_URL, cacheTime=CACHE_HTML_INTERVAL)
     
     podcast_tables = page.xpath('//div[@class="pod"]/table')
     
@@ -45,7 +45,7 @@ def PodcastMenu(sender, kind):
             rss_url = tr_rss_url[0].xpath('./td/a')[0].get('href')
             
             # Fetch the image from the RSS file
-            feed = XML.ElementFromURL(rss_url, isHTML=False, cacheTime=CACHE_RSS_FEED_INTERVAL)
+            feed = XML.ElementFromURL(rss_url, cacheTime=CACHE_RSS_FEED_INTERVAL)
             
             try:
                 image = feed.xpath('//itunes:image', namespaces=PODCAST_ITUNES_NAMESPACE)[0].get('href')
@@ -65,7 +65,7 @@ def PodcastShowMenu(sender, podcastName=None, podcastUrl=None, podcastSubtitle=N
     dir = MediaContainer(viewGroup='Details', title2=sender.itemTitle)
     dir.title2 = podcastName
     
-    rss = XML.ElementFromURL(podcastUrl, isHTML=False, cacheTime=CACHE_RSS_FEED_INTERVAL)
+    rss = XML.ElementFromURL(podcastUrl, cacheTime=CACHE_RSS_FEED_INTERVAL)
     
     episodes = rss.xpath('//channel/item')
     
