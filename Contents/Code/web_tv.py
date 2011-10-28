@@ -51,7 +51,7 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
     elif categoryId:
         url = '%s/menyfragment.aspx?type=category&id=%s' % (BASE_URL_WEBTV, categoryId)
         Log('Fetching %s' % url)
-        elements = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL) # , encoding='utf-8'
+        elements = HTML.ElementFromURL(url, cacheTime=0) # , encoding='utf-8'
     
     # Display error message if there's no content
     if not elements:
