@@ -53,7 +53,7 @@ def fix_chars(s):
     """
     Fixes wrongly encoded unicode characters.
     """
-    if not s:
+    if s is None:
         return s
     
     s = kill_gremlins(s)

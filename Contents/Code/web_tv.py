@@ -54,7 +54,7 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
         elements = HTML.ElementFromURL(url, cacheTime=0) # , encoding='utf-8'
     
     # Display error message if there's no content
-    if not elements:
+    if elements is None:
         return (MessageContainer(header=L('title'), message=L('webtv_error_nocontent'), title1=L('title')))
     
     for element in elements:
@@ -63,7 +63,7 @@ def WebTVProgramMenu(sender, projectId=None, categoryId=None, programImage=None)
             elem_a = element.xpath('./a')[0]
         except IndexError:
             elem_a = element
-            if not elem_a.get('href'):
+            if elem_a.get('href') is None:
                 break
         
         # Link is a clip
@@ -146,7 +146,7 @@ def WebTVMostViewedMenu(sender, days=7):
     program_elements = page.xpath('//ul')[0]
     
     # Display error message if there's no content
-    if not program_elements:
+    if program_elements is None:
         return (MessageContainer(header=L('title'), message=L('webtv_error_nocontent'), title1=L('title')))
     
     for program_element in program_elements:
@@ -217,7 +217,7 @@ def WebTVContentMenu(sender, genre_id=None, letter=None):
     elements = page.xpath('//div[contains(@class,"nettv-category")]/ul')[0]
     
     # Display error message if there's no content
-    if not elements:
+    if elements is None:
         return (MessageContainer(header=L('title'), message=L('webtv_error_nocontent'), title1=L('title')))
     
     for element in elements:
@@ -269,7 +269,7 @@ def get_wmv_link(clip_url):
     
     page = HTML.ElementFromURL(url, cacheTime=CACHE_HTML_INTERVAL)
     
-    if not page:
+    if page is None:
         Log('Error fetching URL from %s' % url)
         return None
     
