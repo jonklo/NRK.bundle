@@ -44,7 +44,7 @@ def LiveRadioMenu(sender):
     # Adds all the station as track items
     for station in LIVE_RADIO_STATIONS:
         url = '%s%s_mp3_%s' % \
-            (LIVE_RADIO_BASEURL, station[0], Prefs.Get("radio_quality"))
+            (LIVE_RADIO_BASEURL, station[0], Prefs["radio_quality"])
             
         Log('Added stream: %s' % url)
         
